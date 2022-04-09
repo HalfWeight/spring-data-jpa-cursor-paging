@@ -124,6 +124,9 @@
                 <version>${gitflow-maven-plugin.version}</version>
                 <configuration>
                     <versionDigitToIncrement>1</versionDigitToIncrement>
+                    <gitFlowConfig>
+                        <productionBranch>main</productionBranch>
+                    </gitFlowConfig>
                 </configuration>
             </plugin>
             <plugin>
