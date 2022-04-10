@@ -1,6 +1,7 @@
 # Spring data jpa cursor paging
 
 [![CircleCI](https://circleci.com/gh/HalfWeight/spring-data-jpa-cursor-paging/tree/master.svg?style=shield)](https://circleci.com/gh/HalfWeight/spring-data-jpa-cursor-paging/tree/master)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.halfweight/spring-data-jpa-cursor-paging/badge.svg?style=plastic)](https://maven-badges.herokuapp.com/maven-central/io.github.halfweight/spring-data-jpa-cursor-paging/)
 [![License](https://img.shields.io/badge/license-MIT-green)](https://choosealicense.com/licenses/mit/)
 
 The spring-data-jpa-cursor-paging Java library allows to easily implement cursor pagination for Spring Boot projects.
