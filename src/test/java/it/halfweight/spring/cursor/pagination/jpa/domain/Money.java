@@ -1,9 +1,10 @@
 package it.halfweight.spring.cursor.pagination.jpa.domain;
 
 import com.google.common.base.Objects;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Currency;
