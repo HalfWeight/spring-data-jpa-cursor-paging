@@ -4,7 +4,6 @@ import com.google.common.base.Objects;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Currency;
