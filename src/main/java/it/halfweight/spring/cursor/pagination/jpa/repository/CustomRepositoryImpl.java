@@ -9,9 +9,18 @@ import com.google.common.collect.Iterables;
 import it.halfweight.spring.cursor.pagination.jpa.annotation.ProjectionCreator;
 import it.halfweight.spring.cursor.pagination.jpa.annotation.SelectPath;
 import it.halfweight.spring.cursor.pagination.jpa.domain.CursorPageable;
-import it.halfweight.spring.cursor.pagination.jpa.exception.CursorPaginationException;
 import it.halfweight.spring.cursor.pagination.jpa.domain.CursorPaginationSlice;
 import it.halfweight.spring.cursor.pagination.jpa.domain.Projection;
+import it.halfweight.spring.cursor.pagination.jpa.exception.CursorPaginationException;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.LockModeType;
+import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Path;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
+import jakarta.persistence.criteria.Selection;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -21,28 +30,19 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.support.CrudMethodMetadata;
 import org.springframework.data.jpa.repository.support.JpaEntityInformation;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
-import org.springframework.data.repository.support.PageableExecutionUtils;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
-import org.springframework.util.Base64Utils;
 import org.springframework.util.DigestUtils;
 import org.springframework.util.ReflectionUtils;
 
-import javax.persistence.EntityManager;
-import javax.persistence.LockModeType;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Path;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-import javax.persistence.criteria.Selection;
 import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -229,7 +229,7 @@ public class CustomRepositoryImpl<T, ID extends Serializable> extends SimpleJpaR
         @Override
         public Selection<S> toSelection(Root<E> root, CriteriaBuilder cb) {
             return cb.construct(projectionClass, projectionSelections.stream()
-                    .map(pjSelection -> getPath(root, pjSelection.path).as(pjSelection.type))
+                    .map(pjSelection -> getPath(root, pjSelection.path))
                     .toArray(Selection[]::new));
         }
 
@@ -281,7 +281,7 @@ public class CustomRepositoryImpl<T, ID extends Serializable> extends SimpleJpaR
 
     protected ContinuationTokenInfo decrypt(String strToDecrypt) {
         try {
-            byte[] decrypted = Base64Utils.decodeFromUrlSafeString(strToDecrypt);
+            byte[] decrypted = Base64.getUrlDecoder().decode(strToDecrypt);
             String token = new String(decrypted);
             String[] splitToken = token.split(UNSERSCORE);
             String prevSortHashed = splitToken[0];
@@ -295,7 +295,7 @@ public class CustomRepositoryImpl<T, ID extends Serializable> extends SimpleJpaR
     protected String encrypt(String hash, Map<String, String> mapToEncrypt) {
         try {
             String enc = Joiner.on(SEMICOLON).withKeyValueSeparator(EQUAL).join(mapToEncrypt);
-            return Base64Utils.encodeToUrlSafeString((hash + UNSERSCORE + enc).getBytes());
+            return Base64.getUrlEncoder().encodeToString((hash + UNSERSCORE + enc).getBytes());
         } catch (Exception e) {
             throw new CursorPaginationException("Unable to encrypt " + mapToEncrypt, e);
         }
