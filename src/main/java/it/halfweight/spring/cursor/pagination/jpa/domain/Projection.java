@@ -1,8 +1,9 @@
 package it.halfweight.spring.cursor.pagination.jpa.domain;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.Root;
-import javax.persistence.criteria.Selection;
+
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.Root;
+import jakarta.persistence.criteria.Selection;
 
 public interface Projection<X, Y> {
 
