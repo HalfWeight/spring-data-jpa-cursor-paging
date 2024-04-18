@@ -62,30 +62,30 @@ This is a community-based project, not maintained by the Spring Framework Contri
    
 ### Customization
 
-To convert values to strings and vice-versa the library uses the `ConvertUtils` from `commons-beanutils`. This is useful
+To convert values to strings and vice-versa the library uses the `ConvertUtils` from `it.halfweight.spring.cursor.pagination.jpa.util`. This is useful
 to store information into the *continuationToken*.
 
 If in your entity you are using a not mapped type you would use to sort, you can add a custom converter in this way:
 
    ```java
-ConvertUtils.register(new AbstractConverter() {
+ConverterUtil.config(Map.of(Instant.class,new AbstractConverter() {
 
-    @Override
-    protected <T> T convertToType(Class<T> type, Object value) throws Throwable {
+@Override
+protected <T> T convertToType(Class<T> type, Object value) throws Throwable {
         return (T) Instant.ofEpochMilli(Long.parseLong((String) value));
-    }
+        }
 
-    @Override
-    protected String convertToString(Object value) throws Throwable {
+@Override
+protected String convertToString(Object value) throws Throwable {
         return Long.toString(((Instant)value).toEpochMilli());
-    }
+        }
 
-    @Override
-    protected Class<?> getDefaultType() {
+@Override
+protected Class<?> getDefaultType() {
         return Instant.class;
     }
-}, Instant.class);
-   ```
+}));
+ ```
 
 ## Contributing
 

@@ -12,6 +12,7 @@ import it.halfweight.spring.cursor.pagination.jpa.domain.CursorPageable;
 import it.halfweight.spring.cursor.pagination.jpa.domain.CursorPaginationSlice;
 import it.halfweight.spring.cursor.pagination.jpa.domain.Projection;
 import it.halfweight.spring.cursor.pagination.jpa.exception.CursorPaginationException;
+import it.halfweight.spring.cursor.pagination.jpa.util.ConverterUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.LockModeType;
 import jakarta.persistence.TypedQuery;
@@ -320,7 +321,7 @@ public class CustomRepositoryImpl<T, ID extends Serializable> extends SimpleJpaR
             Preconditions.checkArgument(field != null, "Field not found by reflection fieldName: " + propertyName + " class:" + getDomainClass());
             field.setAccessible(true);
             Object objectValue = field.get(lastItem);
-            return (String) ConvertUtils.convert(objectValue, String.class);
+            return (String) ConverterUtil.convert(objectValue, String.class);
         } catch (IllegalAccessException e) {
             throw new CursorPaginationException("Unable to get field from " + entityInformation.getJavaType() + " of name " + propertyName, e);
         }
