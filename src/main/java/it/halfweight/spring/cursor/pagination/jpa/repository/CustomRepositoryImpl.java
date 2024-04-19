@@ -22,7 +22,6 @@ import jakarta.persistence.criteria.Path;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import jakarta.persistence.criteria.Selection;
-import org.apache.commons.beanutils.ConvertUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -310,7 +309,7 @@ public class CustomRepositoryImpl<T, ID extends Serializable> extends SimpleJpaR
         Field field = ReflectionUtils.findField(getDomainClass(), propertyName);
         Preconditions.checkArgument(field != null, "Field not found by reflection fieldName: " + propertyName + " class:" + getDomainClass());
 
-        Object startingPoint = ConvertUtils.convert(value, field.getType());
+        Object startingPoint = ConverterUtil.convert(value, field.getType());
         Preconditions.checkArgument(Comparable.class.isAssignableFrom(startingPoint.getClass()), "Cannot use a non comparable field");
         return (Comparable) startingPoint;
     }
